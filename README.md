@@ -19,7 +19,7 @@ compile 'com.squareup.retrofit2:converter-gson:2.1.0'
 
 First create your network manager which will be a singleton
 
-```
+```java
 public class NetworkManager {
 
     private static NetworkManager INSTANCE = null;
