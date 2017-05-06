@@ -8,11 +8,14 @@ Type-safe HTTP client for Android and Java by Square, Inc.
 
 ### Prerequisites
 
-Add thoses line to your build.gradle (Project)
+Add thoses line to your build.gradle (App)
 
 ```
 compile 'com.squareup.retrofit2:retrofit:2.1.0'
 compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+
+You can also add a Http logger to help you in your debug
+compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
 ```
 
 ### Usage
