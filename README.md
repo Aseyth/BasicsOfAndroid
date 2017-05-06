@@ -77,11 +77,78 @@ private NetworkManager() {
     }
 ```
 
+Implement a Retrofit interface which will contain your Http request
+
+```java
+public class NetworkServices {
+    public interface NetworkRequest {
+
+        @POST("{path}/user")
+        Call<ContainerModel> createUser(
+                @Path("path") String myPath,
+                @Body ContainerModel user
+        );
+
+        @PUT("{path}/user/{id}")
+        Call<ContainerModel> updateUser(
+                @Path("path") String myPath,
+                @Path("id") int userId,
+                @Body ContainerModel user
+        );
+
+        @GET("{path}/user/{id}")
+        Call<ContainerModel> getUser(
+                @Path("apiVersion") String myPath,
+                @Path("id") String id
+        );
+
+        @PATCH("{path}/user/{id}")
+        Call<ContainerModel> updateProfile(
+                @Path("apiVersion") String myPath,
+                @Path("id") int id,
+                @Body ContainerModel user
+        );
+
+        @GET("{path}/user/search")
+        Call<ContainerModel> searchUser(
+          @Path("path") String myPath,
+          @Query("firstName") String firstName,
+          @Query("lastName") String lastName,
+          @Query("age") int age
+        );
+    }
+}
+```
+
 Implement an interface to notify the state of your request top your view
 
 ```java
 public interface ResultHandler<T> {
         void success(T result);
         void error(String error);
+    }
+```
+
+Now that both your interfaces are implemented you can implement your calls methods
+
+```java
+public void createUser(ContainerModel user, final ResultHandler<ContainerModel> callback) {
+        Call<ContainerModel> call = this.networkServices.createUser("API_PATH", user);
+
+        call.enqueue(new Callback<ContainerModel>() {
+            @Override
+            public void onResponse(Call<ContainerModel> call, Response<ContainerModel> response) {
+                if (response.code() == 204) {
+                    callback.success(response.body());
+                } else {
+                    callback.error(response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ContainerModel> call, Throwable t) {
+                // network/server error
+            }
+        });
     }
 ```
