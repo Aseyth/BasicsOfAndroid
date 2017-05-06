@@ -284,3 +284,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 }
 ```
+
+
+## Fragments & tips
+
+
+### Fragment transactions
+
+First you need to identify the layout in your activity which will contain your fragment (R.id.fragment in this example), then create your new Fragment and replace or add the new fragment to your existing activity
+Little tip: When you use .add, make your new Fragment clickable to avoid clicking widget of your previous Fragment. When a new Fragment is added the previous Fragment is still there and the new one is above the previous Fragment.
+
+```java
+NewFragment myNewFragment = new NewFragment();
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.fragment_slide_in, R.anim.fragment_slide_out, R.anim.fragment_pop_in, R.anim.fragment_pop_out)
+                .replace(R.id.fragment, myNewFragment, NewFragment.class.getSimpleName())
+                .addToBackStack(NewFragment.class.getSimpleName())
+                .commit();
+```
+
