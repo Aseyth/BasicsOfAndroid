@@ -73,3 +73,12 @@ private NetworkManager() {
         this.mRetrofit = retrofitBuilder.build();
     }
 ```
+
+Implement an interface to notify the state of your request top your view
+
+```java
+public interface ResultHandler<T> {
+        void success(T result);
+        void error(String error);
+    }
+```
