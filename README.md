@@ -217,3 +217,70 @@ Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
                 .client(client);
 Retrofit mRetrofit = retrofitBuilder.build();
 ```
+
+## Recycler View
+
+Here is an example of a fragment implementing a simple Recycler View
+
+```java
+public class RecyclerViewFragment extends Fragment {
+
+    RecyclerView mRecyclerView;
+    RecyclerViewAdapter mRecyclerViewAdapter;
+    List<Data> mList;
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_recycler_view, container, false);
+
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
+        mRecyclerViewAdapter = new RecyclerViewAdapter(mList, R.layout.item_template, getContext());
+        mRecyclerView.setAdapter(mRecyclerViewAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        return view;
+    }
+}
+```
+
+```java
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecyclerViewAdapterViewHolder> {
+
+    List<Data> mDataList;
+    int mLayout;
+
+    public RecyclerViewAdapter(List<Data> dataList, int layout) {
+        this.mDataList = dataList;
+        this.mLayout = layout;
+    }
+
+    @Override
+    public RecyclerViewAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(mLayout, parent, false);
+        return new RecyclerViewAdapterViewHolder(v);
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerViewAdapter.RecyclerViewAdapterViewHolder holder, int position) {
+        holder.mItem = mDataList.get(position);
+        holder.mName.setText(holder.mItem.getName());
+    }
+
+    @Override
+    public int getItemCount() {
+        return mDataList.size();
+    }
+
+    public static class RecyclerViewAdapterViewHolder extends RecyclerView.ViewHolder {
+
+        private Data mItem;
+        private TextView mName;
+
+        RecyclerViewAdapterViewHolder(View itemView) {
+            super(itemView);
+            mName = (TextView) itemView.findViewById(R.id.name_template);
+        }
+    }
+}
+```
