@@ -120,7 +120,7 @@ public class NetworkServices {
 }
 ```
 
-Implement an interface to notify the state of your request top your view
+Implement an interface to notify the state of your request to your view
 
 ```java
 public interface ResultHandler<T> {
@@ -152,3 +152,5 @@ public void createUser(ContainerModel user, final ResultHandler<ContainerModel> 
         });
     }
 ```
+
+
