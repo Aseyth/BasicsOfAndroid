@@ -14,3 +14,22 @@ Add thoses line to your build.gradle (Project)
 compile 'com.squareup.retrofit2:retrofit:2.1.0'
 compile 'com.squareup.retrofit2:converter-gson:2.1.0'
 ```
+
+### Usage
+
+First create your network manager which will be a singleton
+
+```
+public class NetworkManager {
+
+    private static NetworkManager INSTANCE = null;
+
+    public static synchronized NetworkManager getInstance()
+    {
+        if (INSTANCE == null) {
+            INSTANCE = new NetworkManager();
+        }
+        return INSTANCE;
+    }
+}
+```
