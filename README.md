@@ -153,4 +153,67 @@ public void createUser(ContainerModel user, final ResultHandler<ContainerModel> 
     }
 ```
 
+### Custom Gson Serializer
 
+First create your custom serializer
+
+```java
+public class CustomSerializer implements JsonSerializer<ContainerModel> {
+
+    @Override
+    public JsonElement serialize(final ContainerModel containerModel, Type typeOfSrc, JsonSerializationContext context) {
+        final JsonObject jsonObject = new JsonObject();
+
+        if (containerModel.getFirstName() != null) {
+            jsonObject.addProperty("firstName", containerModel.getFirstName());
+        }
+        if (containerModel.getLastName() != null) {
+            jsonObject.addProperty("lastName", containerModel.getLastName());
+        }
+        if (containerModel.getAge() != null) {
+            jsonObject.addProperty("age", containerModel.getAge());
+        }
+
+        if (containerModel.getChildObject() != null) {
+            final JsonElement jsonChildObject = context.serialize(containerModel.getChildObject());
+            jsonObject.add("childObject", jsonChildObject);
+        }
+
+        return jsonObject;
+    }
+}
+```
+
+Your custom serializer can contain an object that can also be customized ChildObject in this example
+
+```java
+public class ChildObjectSerializer implements JsonSerializer<ChildObject> {
+
+    @Override
+    public JsonElement serialize(ChildObject childObject, Type typeOfSrc, JsonSerializationContext context) {
+        final JsonObject jsonObject = new JsonObject();
+
+        jsonObject.addProperty("address", childObject.getAddress());
+        jsonObject.addProperty("phoneNumber", childObject.getPhoneNumber());
+
+        return jsonObject;
+    }
+}
+```
+
+Then you need to register your custom serialize
+
+```java
+Gson customSerializer = new GsonBuilder()
+                .registerTypeAdapter(ContainerModel.class, new CustomSerializer())
+                .registerTypeAdapter(ChildObject.class, new ChildObjectSerializer())
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                .create();
+                
+OkHttpClient client = okHttpClient.build();
+Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
+                .baseUrl("API_URL")
+                .addConverterFactory(GsonConverterFactory.create(customSerializer))
+                .client(client);
+Retrofit mRetrofit = retrofitBuilder.build();
+```
