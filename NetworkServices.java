@@ -18,6 +18,13 @@ public class NetworkServices {
                 @Path("path") String myPath,
                 @Body ContainerModel user
         );
+        
+        @PATCH("{path}/user/{id}")
+        Call<ContainerModel> updateUser(
+                @Path("path") String myPath,
+                @Path("id") int id,
+                @Body ContainerModel user
+        );
 
         @PUT("{path}/user/{id}")
         Call<ContainerModel> updateUser(
@@ -30,13 +37,6 @@ public class NetworkServices {
         Call<ContainerModel> getUser(
                 @Path("path") String myPath,
                 @Path("id") String id
-        );
-
-        @PATCH("{path}/user/{id}")
-        Call<ContainerModel> updateProfile(
-                @Path("path") String myPath,
-                @Path("id") int id,
-                @Body ContainerModel user
         );
 
         @GET("{path}/user/search")
