@@ -28,13 +28,13 @@ public class NetworkServices {
 
         @GET("{path}/user/{id}")
         Call<ContainerModel> getUser(
-                @Path("apiVersion") String myPath,
+                @Path("path") String myPath,
                 @Path("id") String id
         );
 
         @PATCH("{path}/user/{id}")
         Call<ContainerModel> updateProfile(
-                @Path("apiVersion") String myPath,
+                @Path("path") String myPath,
                 @Path("id") int id,
                 @Body ContainerModel user
         );
