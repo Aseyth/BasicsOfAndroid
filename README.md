@@ -303,3 +303,31 @@ NewFragment myNewFragment = new NewFragment();
                 .commit();
 ```
 
+### Fragment & newInstance
+
+It isn't recommended to create a constructor for a fragment so when you want to pass some data to your new fragment you can use newInstance to instanciate your new fragment properly with your data
+
+```java
+MyObject myObject = new MyObject("data");
+NewFragment myNewFragment = NewFragment.newInstance(myObject);
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.fragment_slide_in, R.anim.fragment_slide_out, R.anim.fragment_pop_in, R.anim.fragment_pop_out)
+                .replace(R.id.fragment, myNewFragment, NewFragment.class.getSimpleName())
+                .addToBackStack(NewFragment.class.getSimpleName())
+                .commit();
+```
+
+Then in your "NewFragment" create a new instance of your object and initialize it with your data
+
+```java
+private MyObject myObject = null;
+
+public static NewFragment newInstance(MyObject object) {
+
+        Bundle args = new Bundle();
+        NewFragment fragment = new NewFragment();
+        fragment.setArguments(args);
+        myObject = object;
+        return fragment;
+    }
+```
