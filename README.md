@@ -33,3 +33,40 @@ public class NetworkManager {
     }
 }
 ```
+
+Then add a method to initialize your Retrofit instance
+
+```java
+private NetworkManager() {
+        this.initRetrofit();
+    }
+
+    private void initRetrofit() {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY); // Log options for debug (NONE, BASIC, HEADERS, BODY)
+
+        OkHttpClient.Builder okHttpClient = new OkHttpClient.Builder();
+        okHttpClient.addInterceptor(logging)
+                .addInterceptor(new Interceptor() {
+                    @Override
+                    public okhttp3.Response intercept(Interceptor.Chain chain) throws IOException {
+                        okhttp3.Request original = chain.request();
+
+                        okhttp3.Request request = original.newBuilder()
+                                .header("Authorization", "Bearer " + "API_TOKEN")
+                                .method(original.method(), original.body())
+                                .build();
+
+                        return chain.proceed(request);
+                    }
+                });
+
+
+        OkHttpClient client = okHttpClient.build();
+        Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
+                .baseUrl("API_URL")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client);
+        this.mRetrofit = retrofitBuilder.build();
+    }
+```
