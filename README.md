@@ -331,3 +331,37 @@ public static NewFragment newInstance(MyObject object) {
         return fragment;
     }
 ```
+
+### Add button in your AppBar
+
+First add this line in your Fragment or Activity
+
+```java
+setHasOptionsMenu(true);
+```
+
+Then you need to override the method onCreateOptionMenu
+
+```java
+@Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_informations, menu);
+        mInfo = menu.findItem(R.id.action_information);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+```
+
+Once onCreateOptionMenu implemented you need to override the onOptionsItemSelected to set the behaviour of your new button
+
+```java
+@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_information:
+                // do whatever you need
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+```
